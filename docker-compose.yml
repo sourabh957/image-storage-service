@@ -1,0 +1,40 @@
+services:
+
+  app:
+    image: image-storage-service:1.0
+
+    container_name: image-storage-service
+
+    environment:
+      DB_URL: jdbc:postgresql://postgresql:5432/image_storage
+      DB_USERNAME: docker-db
+      DB_PASSWORD: sourabh123
+      AWS_REGION: ap-south-1
+
+    volumes:
+      - ${USERPROFILE}/.aws:/root/.aws:ro
+
+    ports:
+      - "8080:8080"
+
+    depends_on:
+      - postgresql
+
+  postgresql:
+    image: postgres:16
+
+    container_name: postgresql
+
+    environment:
+      POSTGRES_DB: image_storage
+      POSTGRES_USER: docker-db
+      POSTGRES_PASSWORD: sourabh123
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
