@@ -1,40 +1,39 @@
 services:
-
   app:
-    image: image-storage-service:1.0
-
+    build: .
     container_name: image-storage-service
-
+    env_file: .env
     environment:
       DB_URL: jdbc:postgresql://postgresql:5432/image_storage
-      DB_USERNAME: docker-db
-      DB_PASSWORD: sourabh123
-      AWS_REGION: ap-south-1
-
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      AWS_REGION: ${AWS_REGION:-ap-south-1}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-my-images-bucket}
     volumes:
       - ${USERPROFILE}/.aws:/root/.aws:ro
-
     ports:
       - "8080:8080"
-
     depends_on:
-      - postgresql
+      postgresql:
+        condition: service_healthy
 
   postgresql:
     image: postgres:16
-
-    container_name: postgresql
-
+    container_name: postgresql-iss
+    env_file: .env
     environment:
       POSTGRES_DB: image_storage
-      POSTGRES_USER: docker-db
-      POSTGRES_PASSWORD: sourabh123
-
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
-
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d image_storage"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:

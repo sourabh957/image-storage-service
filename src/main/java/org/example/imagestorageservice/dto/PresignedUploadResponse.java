@@ -1,4 +1,4 @@
-package org.example.imagestorageservice.entities;
+package org.example.imagestorageservice.dto;
 
 public record PresignedUploadResponse(
         String imageId,

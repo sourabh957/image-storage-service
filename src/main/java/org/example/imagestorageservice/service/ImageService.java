@@ -7,6 +7,7 @@ import org.example.imagestorageservice.entities.Image;
 import org.example.imagestorageservice.exception.ImageNotFoundException;
 import org.example.imagestorageservice.repository.ImageRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -17,18 +18,17 @@ public class ImageService {
 
     private final ImageRepository imageRepository;
 
+    @Transactional
     public ImageResponse createImage(CreateImageRequest request, UUID imageId) {
         Image image = new Image();
-
         image.setId(imageId);
-        image.setOriginalFileName(request.getOriginalFileName());
-        image.setContentType(request.getContentType());
-        image.setFileSize(request.getFileSize());
-        image.setS3Key(request.getS3Key());
+        image.setOriginalFileName(request.originalFileName());
+        image.setContentType(request.contentType());
+        image.setFileSize(request.fileSize());
+        image.setS3Key(request.s3Key());
         image.setCreatedAt(Instant.now());
 
         Image savedImage = imageRepository.save(image);
-
         return new ImageResponse(
                 savedImage.getId(),
                 savedImage.getOriginalFileName(),
@@ -52,5 +52,4 @@ public class ImageService {
                 image.getCreatedAt()
         );
     }
-
 }
