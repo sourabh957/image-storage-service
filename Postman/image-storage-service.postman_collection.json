@@ -1,0 +1,100 @@
+{
+  "info": {
+    "_postman_id": "b6a2c3d1-e5f4-41b2-9a8c-7d6e5f4a3b2c",
+    "name": "Image Storage Service API",
+    "description": "Comprehensive Postman collection for the Image Storage Service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "health"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "item": [
+        {
+          "name": "Upload Image",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/images",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "images"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Image Metadata",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/images/{{imageId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "images", "{{imageId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Presigned URL",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filename\": \"sample.png\",\n  \"contentType\": \"image/png\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/images/presigned-url",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "images", "presigned-url"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
